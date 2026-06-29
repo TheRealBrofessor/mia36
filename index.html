@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Behind the Screen — Learn Cybersecurity From Scratch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #0f1628;
+  --bg-card: #131b30;
+  --bg-card-hover: #1a2440;
+  --border-subtle: #1e2a45;
+  --border-accent: #2a3d5c;
+  --text-primary: #e8ecf4;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-cyan: #22d3ee;
+  --accent-green: #34d399;
+  --accent-amber: #fbbf24;
+  --accent-purple: #a78bfa;
+  --accent-blue: #60a5fa;
+  --accent-rose: #fb7185;
+  --gradient-hero: linear-gradient(135deg, #0a0e1a 0%, #0f1628 50%, #131b30 100%);
+  --shadow-glow: 0 0 40px rgba(34, 211, 238, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Subtle background grid */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 0;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+}
+
+.nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-logo i {
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--accent-cyan);
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 0 80px;
+  position: relative;
+  background: var(--gradient-hero);
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, var(--bg-primary), transparent);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 100px;
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+  font-weight: 500;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.6s ease;
+}
+
+.hero-badge i {
+  font-size: 0.75rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.8rem, 7vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease 0.1s both;
+}
+
+.hero h1 .highlight {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto 40px;
+  font-weight: 300;
+  animation: fadeInUp 0.6s ease 0.2s both;
+}
+
+.hero-tagline em {
+  color: var(--accent-amber);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeInUp 0.6s ease 0.3s both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-cyan), #06b6d4);
+  color: var(--bg-primary);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(34, 211, 238, 0.4);
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-accent);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+}
+
+/* Section Styles */
+section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* About Section */
+#about {
+  background: var(--bg-secondary);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.about-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.about-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow);
+}
+
+.about-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.about-card-icon.cyan { background: rgba(34, 211, 238, 0.1); color: var(--accent-cyan); }
+.about-card-icon.green { background: rgba(52, 211, 153, 0.1); color: var(--accent-green); }
+.about-card-icon.amber { background: rgba(251, 191, 36, 0.1); color: var(--accent-amber); }
+.about-card-icon.purple { background: rgba(167, 139, 250, 0.1); color: var(--accent-purple); }
+
+.about-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.about-card p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Roadmap Section */
+#roadmap {
+  background: var(--bg-primary);
+}
+
+.roadmap-timeline {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.roadmap-line {
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-green), var(--accent-amber), var(--accent-purple), var(--accent-blue), var(--accent-rose), var(--accent-green));
+}
+
+.phase-card {
+  position: relative;
+  padding-left: 80px;
+  margin-bottom: 32px;
+}
+
+.phase-card:last-child {
+  margin-bottom: 0;
+}
+
+.phase-number {
+  position: absolute;
+  left: 12px;
+  top: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  z-index: 2;
+  border: 3px solid var(--bg-primary);
+}
+
+.phase-number.n1 { background: var(--accent-cyan); color: var(--bg-primary); }
+.phase-number.n2 { background: var(--accent-green); color: var(--bg-primary); }
+.phase-number.n3 { background: var(--accent-amber); color: var(--bg-primary); }
+.phase-number.n4 { background: var(--accent-purple); color: var(--bg-primary); }
+.phase-number.n5 { background: var(--accent-blue); color: var(--bg-primary); }
+.phase-number.n6 { background: var(--accent-rose); color: var(--bg-primary); }
+.phase-number.n7 { background: #34d399; color: var(--bg-primary); }
+
+.phase-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.phase-content:hover {
+  border-color: var(--border-accent);
+  background: var(--bg-card-hover);
+  transform: translateX(8px);
+  box-shadow: var(--shadow-glow);
+}
+
+.phase-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.phase-content h3 i {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.phase-content:hover h3 i {
+  color: var(--accent-cyan);
+}
+
+.phase-desc {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.phase-analogy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 100px;
+  font-size: 0.82rem;
+  color: var(--accent-amber);
+  font-weight: 500;
+}
+
+.phase-analogy i {
+  font-size: 0.75rem;
+}
+
+/* Who Section */
+#who {
+  background: var(--bg-secondary);
+}
+
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.who-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.who-item:hover {
+  border-color: var(--accent-green);
+}
+
+.who-item i {
+  color: var(--accent-green);
+  font-size: 1.1rem;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.who-item span {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Getting Started Section */
+#getting-started {
+  background: var(--bg-primary);
+  text-align: center;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  border-color: var(--accent-cyan);
+  transform: translateY(-4px);
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin: 0 auto 16px;
+}
+
+.step-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.step-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.cta-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-box h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.cta-box p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Footer */
+footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+  padding: 48px 0;
+  text-align: center;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.footer-logo i {
+  color: var(--accent-cyan);
+}
+
+footer p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.footer-links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--accent-cyan);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    flex-direction: column;
+    padding: 24px;
+    gap: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  section {
+    padding: 72px 0;
+  }
+
+  .hero {
+    padding: 100px 0 60px;
+  }
+
+  .roadmap-line {
+    left: 24px;
+  }
+
+  .phase-card {
+    padding-left: 64px;
+  }
+
+  .phase-number {
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .phase-content {
+    padding: 20px 24px;
+  }
+
+  .cta-box {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">
+      <i class="fa-solid fa-shield-halved"></i>
+      Behind the Screen
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#roadmap">Roadmap</a></li>
+      <li><a href="#who">Who It's For</a></li>
+      <li><a href="#getting-started">Start</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-circle"></i>
+        Free & Open Source Learning Path
+      </div>
+      <h1>Behind the <span class="highlight">Screen</span></h1>
+      <p class="hero-tagline">
+        A hands-on cybersecurity curriculum for absolute beginners.
+        <em>It's never too late</em> to understand the digital world — start from zero and build real skills.
+      </p>
+      <div class="hero-cta">
+        <a href="#roadmap" class="btn btn-primary">
+          <i class="fa-solid fa-map"></i>
+          Explore the Roadmap
+        </a>
+        <a href="#getting-started" class="btn btn-secondary">
+          <i class="fa-solid fa-rocket"></i>
+          Get Started
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">
+        <i class="fa-solid fa-bullseye"></i>
+        Our Mission
+      </div>
+      <h2 class="section-title">Why This Project Exists</h2>
+      <p class="section-subtitle">
+        Cybersecurity can feel intimidating. We break it down into plain language, hands-on exercises, and relatable analogies.
+      </p>
+    </div>
+    <div class="about-grid">
+      <div class="about-card fade-in">
+        <div class="about-card-icon cyan">
+          <i class="fa-solid fa-book-open"></i>
+        </div>
+        <h3>Plain Language</h3>
+        <p>No jargon without explanation. Every concept is introduced with a real-world analogy you already understand.</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-card-icon green">
+          <i class="fa-solid fa-hand-back-fist"></i>
+        </div>
+        <h3>Hands-On Practice</h3>
+        <p>You learn by doing. Boot a real OS, run real commands, configure real networks — safely, on your own machine.</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-card-icon amber">
+          <i class="fa-solid fa-road"></i>
+        </div>
+        <h3>Step by Step</h3>
+        <p>Seven phases that build on each other. No gaps, no assumed knowledge. Just a clear path from zero to capable.</p>
+      </div>
+      <div class="about-card fade-in">
+        <div class="about-card-icon purple">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <h3>Made for Humans</h3>
+        <p>Written by someone who remembers what it's like to be confused. Patient, encouraging, and judgment-free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap Section -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">
+        <i class="fa-solid fa-route"></i>
+        The Roadmap
+      </div>
+      <h2 class="section-title">Your 7-Phase Journey</h2>
+      <p class="section-subtitle">
+        Each phase builds confidence and capability. Click any card to dive into that chapter.
+      </p>
+    </div>
+
+    <div class="roadmap-timeline">
+      <div class="roadmap-line"></div>
+
+      <!-- Phase 1 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n1">1</div>
+        <a href="chapters/chapter-1-2/" class="phase-content">
+          <h3>Digital Confidence <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Boot Ubuntu from a USB drive and explore a new operating system without touching your current setup.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-car"></i> "Test-driving a car before buying"</span>
+        </a>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n2">2</div>
+        <a href="chapters/chapter-1-2/" class="phase-content">
+          <h3>Linux Terminal <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Navigate the filesystem, run commands, and understand folders from the command line.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-map-location-dot"></i> "GPS vs paper map"</span>
+        </a>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n3">3</div>
+        <a href="chapters/chapter-3/" class="phase-content">
+          <h3>Networking <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Routers, switches, ethernet cables, and the TCP/IP protocol that powers everything.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-envelope"></i> "The postal system"</span>
+        </a>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n4">4</div>
+        <a href="chapters/chapter-4/" class="phase-content">
+          <h3>Internet Traffic <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Packets, outgoing connections, DNS resolution — how data actually moves across the internet.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-box"></i> "Tracking a package through checkpoints"</span>
+        </a>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n5">5</div>
+        <a href="chapters/chapter-5/" class="phase-content">
+          <h3>Web Navigation <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">HTTPS encryption, phishing awareness, VPNs, and how browsers keep you safe (or don't).</p>
+          <span class="phase-analogy"><i class="fa-solid fa-lock"></i> "Checking the lock on a door"</span>
+        </a>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n6">6</div>
+        <a href="chapters/chapter-6/" class="phase-content">
+          <h3>Installing Software <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Package managers, repositories, permissions — how software gets onto your system safely.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-cart-shopping"></i> "Shopping list and store shelves"</span>
+        </a>
+      </div>
+
+      <!-- Phase 7 -->
+      <div class="phase-card fade-in">
+        <div class="phase-number n7">7</div>
+        <a href="chapters/chapter-7/" class="phase-content">
+          <h3>Home Lab & VM <i class="fa-solid fa-arrow-right"></i></h3>
+          <p class="phase-desc">Set up VirtualBox, create snapshots, and build your own safe practice environment — the capstone.</p>
+          <span class="phase-analogy"><i class="fa-solid fa-car-side"></i> "Your own car to practice in"</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Who This Is For Section -->
+<section id="who">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">
+        <i class="fa-solid fa-users"></i>
+        Who This Is For
+      </div>
+      <h2 class="section-title">Is This You?</h2>
+      <p class="section-subtitle">
+        If any of these resonate, you're in the right place.
+      </p>
+    </div>
+    <div class="who-grid fade-in">
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You've always been curious about cybersecurity but didn't know where to start</span>
+      </div>
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You're switching careers and want a structured, beginner-friendly path</span>
+      </div>
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You're a student who learns better by doing than by reading theory</span>
+      </div>
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You're not a "tech person" — and you've been told that's a requirement</span>
+      </div>
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You want to understand how the internet actually works, not just use it</span>
+      </div>
+      <div class="who-item">
+        <i class="fa-solid fa-check"></i>
+        <span>You're a teacher or mentor looking for a curriculum to share with others</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Getting Started Section -->
+<section id="getting-started">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="section-label">
+        <i class="fa-solid fa-rocket"></i>
+        Getting Started
+      </div>
+      <h2 class="section-title">Begin in Minutes</h2>
+      <p class="section-subtitle">
+        No special equipment or prior knowledge needed. Just curiosity.
+      </p>
+    </div>
+
+    <div class="steps-grid fade-in">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Grab a USB Drive</h4>
+        <p>Any 8GB+ USB stick will do. We'll use it to boot Ubuntu safely.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>Read Phase 1</h4>
+        <p>Follow the step-by-step guide to boot your first Linux environment.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>Follow the Roadmap</h4>
+        <p>Work through each phase at your own pace. No rush, no pressure.</p>
+      </div>
+    </div>
+
+    <div class="cta-box fade-in">
+      <h3>Ready to peek behind the screen?</h3>
+      <p>Start with Phase 1 and boot Ubuntu from a USB. It's free, it's safe, and it's the first step toward real understanding.</p>
+      <a href="chapters/chapter-1-2/" class="btn btn-primary">
+        <i class="fa-solid fa-power-off"></i>
+        Start Phase 1
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <i class="fa-solid fa-shield-halved"></i>
+      Behind the Screen
+    </div>
+    <p>A free, open-source cybersecurity curriculum for beginners.</p>
+    <p>Because it's never too late to understand the digital world.</p>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#who">Audience</a>
+      <a href="#getting-started">Start</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+
+navToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+
+// Close nav on link click
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
+// Scroll-triggered fade-in animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, index) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, index * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.fade-in').forEach(el => {
+  observer.observe(el);
+});
+
+// Nav background on scroll
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+});
+</script>
+
+</body>
+</html>

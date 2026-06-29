@@ -1,3 +1,7 @@
+> **Behind the Screen** — [Chapter 1-2](chapter-1-2/) · [Chapter 3](chapter-3/) · [Chapter 4](chapter-4/) · [**Chapter 5**](chapter-5/) · [Chapter 6](chapter-6/) · [Chapter 7](chapter-7/) · [Project Memory](project-memory/vision.md)
+
+---
+
 # Chapter 5: Web Navigation & Safety — Visiting Real Sites and Knowing If They're Safe
 
 ---
